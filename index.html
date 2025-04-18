@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cycle_Sound Project</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Variables */
+    :root {
+      --primary: #1d3557;
+      --secondary: #457b9d;
+      --accent: #e63946;
+      --light-bg: #f8f9fa;
+      --dark-text: #343a40;
+      --soft-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      --radius: 12px;
+      --gap: 24px;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Open Sans', sans-serif;
+      --media-size: 90px; /* increased by ~50% from 60px */
+      --arch-max-width: 400px; /* regulate architecture images */
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      box-shadow: var(--soft-shadow);
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+    }
+    header h1 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 0.5rem; }
+    header p { font-weight: 300; font-size: 1.2rem; opacity: 0.9; }
+    nav ul { display: flex; justify-content: center; gap: var(--gap); margin-top: 1.5rem; flex-wrap: wrap; }
+    nav a { font-weight: 600; padding: 0.5rem 1rem; transition: background 0.3s; border-radius: var(--radius); }
+    nav a:hover { background: rgba(255,255,255,0.2); }
+
+    /* Main */
+    main { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    section { background: white; border-radius: var(--radius); padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.3s; }
+    section:hover { transform: translateY(-5px); }
+    section h2 { font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: 1rem; position: relative; padding-bottom: 0.5rem; }
+    section h2::after { content: ''; position: absolute; width: 50px; height: 3px; background: var(--accent); bottom: 0; left: 0; border-radius: var(--radius); }
+    section p { margin-bottom: 1rem; }
+    section ul { margin-left: 1.5rem; list-style: disc; margin-bottom: 1rem; }
+
+    /* Architecture Images */
+    .media-gallery {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+    .media-gallery img {
+      max-width: var(--arch-max-width);
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .media-gallery img:hover { transform: scale(1.03); }
+
+    /* Results Tables */
+    .results-section { margin-top: 1.5rem; }
+    .results-section h3 { font-size: 1.6rem; margin-bottom: 1rem; color: var(--secondary); text-align: center; }
+    .results-section h4 { font-size: 1.2rem; margin: 0.75rem 0; color: var(--dark-text); text-align: center; }
+    .results-table { margin: 0 auto 2rem; border: 1px solid #ddd; border-collapse: collapse; table-layout: fixed; }
+    .results-table thead th { background: var(--primary); color: white; padding: 0.5rem; font-weight: 600; text-align: center; border-bottom: 2px solid var(--accent); width: var(--media-size); }
+    .results-table tbody td { border-bottom: 1px solid #e0e0e0; padding: 0.5rem; text-align: center; vertical-align: middle; width: var(--media-size); }
+    .results-table img { width: var(--media-size); height: var(--media-size); object-fit: cover; display: block; margin: 0 auto; }
+    .results-table audio { width: var(--media-size); display: block; margin: 0 auto; }
+
+    /* Footer */
+    footer { text-align: center; font-size: 0.9rem; color: #555; padding: 2rem 1rem; }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Cycle_Sound</h1>
+    <p>Cross-Modal Generation: Turning Images into Sounds and Vice Versa</p>
+    <nav>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#media">Media</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>Welcome to my research project portfolio. In this project, we explored the exciting field of cross-modal generation by developing deep learning architectures that can generate one modality (image or audio) from the other. The goal was to create models that:</p>
+      <ul>
+        <li>Generate audio from an image, based on the objects or scene shown.</li>
+        <li>Generate images from audio, by understanding the content of the sound.</li>
+      </ul>
+      <p>
+        The result of this effort is <strong>Cycle_Sound</strong>, a dual-pipeline framework implemented in PyTorch that performs:
+        <strong>Audio→Image</strong> generation (from short Mel-spectrograms to images), and <strong>Image→Audio</strong> generation (from image content to audio waveforms).
+        Each direction uses a discrete Variational Autoencoder (VAE) with Gumbel‑Softmax quantization to encode inputs into a codebook of discrete tokens. A Transformer decoder then learns to translate between these token sequences across modalities.
+      </p>
+    </section>
+  
+    <section id="architecture">
+      <h2>Architecture</h2>
+      <p>The system comprises two parallel pipelines sharing a common design philosophy: discrete latent codebooks for each modality and a Transformer decoder for cross‑modal mapping.</p>
+      
+  
+      <h3>Audio → Image Pipeline</h3>
+      <div class="media-gallery">
+        <img src="model2.png" alt="System Architecture">
+      </div>
+      <p>
+        <strong>Training</strong><br>
+        1. <strong>Pre‑train Image VAE:</strong> Train a discrete VAE on real images to learn a codebook of visual tokens. The encoder compresses images into a grid of code indices; the decoder reconstructs the image from those indices. Losses include reconstruction (pixel or perceptual) and Gumbel‑Softmax KL regularization.<br>
+        2. <strong>Train Audio→Image Transformer:</strong> Freeze the pretrained Image VAE. For each training pair (audio clip → corresponding image):
+        <ul>
+          <li>Convert audio clip to a Mel‑spectrogram.</li>
+          <li>Encode the spectrogram using the Audio Encoder to obtain a sequence of latent audio tokens.</li>
+          <li>Use the Image VAE encoder to get ground‑truth image token indices.</li>
+          <li>Train the Transformer Decoder to map audio tokens and positional embeddings to the image token sequence.</li>
+        </ul>
+        Loss: cross‑entropy between predicted token logits and ground‑truth code indices, optionally augmented with a VAE reconstruction loss (decoded image vs. real).
+  
+        <br><br><strong>Generation</strong><br>
+        1. Encode audio: Compute the Mel‑spectrogram from a new audio clip and encode it into a token sequence.<br>
+        2. Predict image tokens: The Transformer Decoder autoregressively generates image tokens conditioned on audio tokens.<br>
+        3. Decode to image: The Image VAE decoder reconstructs the RGB image from the predicted token indices.
+      </p>
+  
+      <h3>Image → Audio Pipeline</h3>
+      <div class="media-gallery">
+        <img src="model3.png" alt="System Architecture">
+      </div>
+      <p>
+        <strong>Training</strong><br>
+        1. <strong>Pre‑train Audio VAE:</strong> Train a discrete VAE on Mel‑spectrograms extracted from audio clips. The encoder compresses each spectrogram into discrete audio tokens; the decoder reconstructs both the spectrogram and waveform.<br>
+        2. <strong>Train Image→Audio Transformer:</strong> Freeze the pretrained Audio VAE. For each training pair (image → corresponding audio clip):
+        <ul>
+          <li>Resize and encode the image using the Image Encoder to obtain image tokens.</li>
+          <li>Use the Audio VAE encoder to get ground‑truth audio token indices.</li>
+          <li>Train the Transformer Decoder to map image tokens and positional embeddings to audio tokens.</li>
+        </ul>
+        Loss: cross‑entropy between predicted logits and true audio code indices, optionally with reconstruction loss on the decoded spectrogram.
+  
+        <br><br><strong>Generation</strong><br>
+        1. Encode image: The Image Encoder converts a new image into a token sequence.<br>
+        2. Predict audio tokens: The Transformer Decoder autoregressively generates audio tokens from the image tokens.<br>
+        3. Decode to spectrogram and waveform: Use the Audio VAE decoder to reconstruct the Mel‑spectrogram, then apply an inverse Mel transform (e.g., via librosa) to obtain the final waveform.
+      </p>
+    </section>
+
+    <section id="results">
+      <h2>Results Overview</h2>
+      <p>Data splits padded to 5 columns for consistent layout.</p>
+
+      <!-- Audio→Image Training -->
+      <div class="results-section">
+        <h3>Audio → Image Generation</h3>
+        <h4>Training Data</h4>
+        <table class="results-table">
+          <thead><tr><th></th><th>Input Audio</th><th>Generated Image</th><th>Real Image</th><th></th></tr></thead>
+          <tbody id="audio-image-train"></tbody>
+        </table>
+        <h4>Test Data</h4>
+        <table class="results-table">
+          <thead><tr><th></th><th></th><th>Input Audio</th><th>Generated Image</th><th></th></tr></thead>
+          <tbody id="audio-image-test"></tbody>
+        </table>
+      </div>
+
+      <!-- Image→Audio -->
+      <div class="results-section">
+        <h3>Image → Audio Generation</h3>
+        <h4>Training Data</h4>
+        <table class="results-table">
+          <thead><tr><th>Input Image</th><th>Generated Audio</th><th>Real Audio</th><th>Generated Spectrogram</th><th>Real Spectrogram</th></tr></thead>
+          <tbody id="image-audio-train"></tbody>
+        </table>
+        <h4>Test Data</h4>
+        <table class="results-table">
+          <thead><tr><th></th><th>Input Image</th><th>Generated Audio</th><th>Real Audio</th><th></th></tr></thead>
+          <tbody id="image-audio-test"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>&copy; 2025 Cycle_Sound Team</footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Audio→Image Train
+      const ait = document.getElementById('audio-image-train');
+      for (let i=1; i<=20; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td></td><td><audio controls src="./Gen_Img/${i}.wav"></audio></td><td><img src="./Gen_Img/${i}_g.png" alt="Gen Img ${i}"></td><td><img src="./Gen_Img/${i}_r.png" alt="Real Img ${i}"></td><td></td>`;
+        ait.appendChild(row);
+      }
+      // Audio→Image Test
+      const aitest = document.getElementById('audio-image-test');
+      for (let i=21; i<=31; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td></td><td></td><td><audio controls src="./Gen_Img/${i}.wav"></audio></td><td><img src="./Gen_Img/${i}_g.png" alt="Gen Img ${i}"></td><td></td>`;
+        aitest.appendChild(row);
+      }
+      // Image→Audio Train
+      const iat = document.getElementById('image-audio-train');
+      for (let i=1; i<=11; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td><img src="./Gen_audio/${i}.png" alt="Input Img ${i}"></td><td><audio controls src="./Gen_audio/${i}_ag.wav"></audio></td><td><audio controls src="./Gen_audio/${i}_ar.wav"></audio></td><td><img src="./Gen_audio/${i}_sg.png" alt="Gen Spec ${i}"></td><td><img src="./Gen_audio/${i}_sr.png" alt="Real Spec ${i}"></td>`;
+        iat.appendChild(row);
+      }
+      // Image→Audio Test
+      const iatest = document.getElementById('image-audio-test');
+      for (let i=12; i<=16; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td></td><td><img src="./Gen_audio/${i}.png" alt="Input Img ${i}"></td><td><audio controls src="./Gen_audio/${i}_ag.wav"></audio></td><td><audio controls src="./Gen_audio/${i}_ar.wav"></audio></td><td></td>`;
+        iatest.appendChild(row);
+      }
+    });
+  </script>
+</body>
+</html>
