@@ -172,7 +172,20 @@
 
     <section id="results">
       <h2>Results Overview</h2>
-      <p>Data splits padded to 5 columns for consistent layout.</p>
+      <p>For training our model, we created a dataset of audio-image pairs by using VGG-Sound dataset.
+        For each video, we had top 10 moments when audio-visual correspondance was highest, we
+        extracted 1 sec. audio clip and its corresponding frame for each of the 10 moments. We did this
+        for a subset of videos of VGG-Sound and finally created a dataset with about 24k audio-image
+        pairs.
+        For testing the models, we used two types of test samples:
+        <ul>
+          <li>Type 1: The first set of images are generated from audio clips taken from a video that was
+        part of the training set. However, the exact audio clips used for generation were not seen
+        during training.</li>
+          <li>Type 2: The second set of images is generated from entirely new audio clips, from videos
+        that were not part of the training data.</li>
+        </ul>        
+      </p>
 
       <!-- Audio→Image Training -->
       <div class="results-section">
